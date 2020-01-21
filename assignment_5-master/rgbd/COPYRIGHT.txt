@@ -1,0 +1,12 @@
+The images present in this folder are part of the SUN RGB-D dataset (http://rgbd.cs.princeton.edu/), and are used for education purposes.
+
+Citation:
+S. Song, S. Lichtenberg, and J. Xiao.
+SUN RGB-D: A RGB-D Scene Understanding Benchmark Suite
+Proceedings of 28th IEEE Conference on Computer Vision and Pattern Recognition (CVPR2015)
+
+The dataset contains RGB-D images from NYU depth v2 [1], Berkeley B3DO [2], and SUN3D [3]. Besides this paper, you are required to also cite the following papers if you use this dataset:
+[1]N. Silberman, D. Hoiem, P. Kohli, R. Fergus. Indoor segmentation and support inference from rgbd images. In ECCV, 2012.
+[2] A. Janoch, S. Karayev, Y. Jia, J. T. Barron, M. Fritz, K. Saenko, and T. Darrell. A category-level 3-d object dataset: Putting the kinect to work. In ICCV Workshop on Consumer Depth Cameras for Computer Vision, 2011.
+[3] J. Xiao, A. Owens, and A. Torralba. SUN3D: A database of big spaces reconstructed using SfM and object labels. In
+ICCV, 2013

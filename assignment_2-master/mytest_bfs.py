@@ -1,0 +1,94 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep 16 20:58:31 2019
+
+@author: songl
+"""
+# coding=utf-8
+import pickle
+import random
+import unittest
+
+import matplotlib.pyplot as plt
+import networkx
+
+from explorable_graph import ExplorableGraph
+from submission import PriorityQueue, a_star, bidirectional_a_star, \
+    bidirectional_ucs, breadth_first_search, uniform_cost_search, haversine_dist_heuristic, \
+    tridirectional_upgraded, custom_heuristic
+from visualize_graph import plot_search
+
+class TestBasicSearch(unittest.TestCase):
+    """Test the simple search algorithms: BFS, UCS, A*"""
+
+    def setUp(self):
+        """Romania map data from Russell and Norvig, Chapter 3."""
+        with open('romania_graph.pickle', 'rb') as rom:
+            romania = pickle.load(rom)
+        self.romania = ExplorableGraph(romania)
+        self.romania.reset_search()
+
+    def test_bfs(self):
+        """Test and visualize breadth-first search"""
+        start = 'a'
+        goal = 'u'
+
+        node_positions = {n: self.romania.node[n]['pos'] for n in
+                          self.romania.node.keys()}
+
+        self.romania.reset_search()
+        path = breadth_first_search(self.romania, start, goal)
+        print(path)
+        print(self.romania.explored_nodes)
+
+        self.draw_graph(self.romania, node_positions=node_positions,
+                        start=start, goal=goal, path=path)
+        
+    
+    def test_bfs_empty_path(self):
+        start = "a"
+        goal = "a"
+        path = breadth_first_search(self.romania, start, goal)
+        self.assertEqual([], path)
+        
+    @staticmethod
+    def draw_graph(graph, node_positions=None, start=None, goal=None,
+                   path=None):
+        """Visualize results of graph search"""
+        explored = [key for key in graph.explored_nodes if graph.explored_nodes[key] > 0]
+
+        labels = {}
+        for node in graph:
+            labels[node] = node
+
+        if node_positions is None:
+            node_positions = networkx.spring_layout(graph)
+
+        networkx.draw_networkx_nodes(graph, node_positions)
+        networkx.draw_networkx_edges(graph, node_positions, style='dashed')
+        networkx.draw_networkx_labels(graph, node_positions, labels)
+
+        networkx.draw_networkx_nodes(graph, node_positions, nodelist=explored,
+                                     node_color='g')
+        edge_labels = networkx.get_edge_attributes(graph, 'weight')
+        networkx.draw_networkx_edge_labels(graph, node_positions, edge_labels=edge_labels)
+        
+        if path is not None:
+            edges = [(path[i], path[i + 1]) for i in range(0, len(path) - 1)]
+            networkx.draw_networkx_edges(graph, node_positions, edgelist=edges,
+                                         edge_color='b')
+
+        if start:
+            networkx.draw_networkx_nodes(graph, node_positions,
+                                         nodelist=[start], node_color='b')
+
+        if goal:
+            networkx.draw_networkx_nodes(graph, node_positions,
+                                         nodelist=[goal], node_color='y')
+
+        plt.plot()
+        plt.show()
+
+if __name__ == '__main__':
+    unittest.main()
+
